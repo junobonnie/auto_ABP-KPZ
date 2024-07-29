@@ -202,33 +202,35 @@ class Simulator(Simulator):
             self.count_snapshot = f.attrs['count_snapshot']
             world = f['world']
             t = world.attrs['t']
-            gravity = self.list_to_vector(list(world.attrs['gravity']))
-            element_ = world['atoms']['element']
-            mass_ = world['atoms']['mass']
-            radius_ = world['atoms']['radius']
-            color_ = world['atoms']['color']
+            #gravity = self.list_to_vector(list(world.attrs['gravity']))
+            #element_ = world['atoms']['element']
+            #mass_ = world['atoms']['mass']
+            #radius_ = world['atoms']['radius']
+            #color_ = world['atoms']['color']
             pos_ = world['atoms']['pos']
             vel_ = world['atoms']['vel']
             polarity_ = world['atoms']['polarity']
             is_static_ = world['atoms']['is_static']
-            N = len(element_)
+            N = len(pos_)
             atoms = [0]*N
             for i in range(N):
-                element = Element(element_[i], float(mass_[i]), float(radius_[i]), pg.Color(color_[i]))
+                #element = Element(element_[i], float(mass_[i]), float(radius_[i]), pg.Color(color_[i]))
+                element = Element("Helium", 1.0, 3.0, pg.Color('red'))
                 pos = self.list_to_vector(pos_[i])
                 vel = self.list_to_vector(vel_[i])
                 atoms[i] = Atom(element, pos, vel, float(polarity_[i]), bool(is_static_[i]))
-            width_ = world['walls']['width']
-            height_ = world['walls']['height']
-            theta_ = world['walls']['theta']
-            pos_ = world['walls']['pos']
-            color_ = world['walls']['color']
-            N = len(width_)
-            walls = [0]*N
-            for i in range(N):
-                walls[i] = Wall(width_[i], height_[i], theta_[i], self.list_to_vector(pos_[i]), pg.Color(color_[i]))
-            self.world = World(t, atoms, walls, gravity)
-
+            #width_ = world['walls']['width']
+            #height_ = world['walls']['height']
+            #theta_ = world['walls']['theta']
+            #pos_ = world['walls']['pos']
+            #color_ = world['walls']['color']
+            #N = len(width_)
+            #walls = [0]*N
+            #for i in range(N):
+            #    walls[i] = Wall(width_[i], height_[i], theta_[i], self.list_to_vector(pos_[i]), pg.Color(color_[i]))
+            walls=[]
+            self.world = World(t, atoms, walls, gravity=Vector(0, 0))
+        
 #=============== 새로 추가된 부분 ===============#
 
 ### render 설정 ###
@@ -431,5 +433,5 @@ while True:
         simulator.count_snapshot += 1
     
     ### 매시간 마다 시뮬레이션 스냅샷을 저장하는 코드 ###
-    if t > 10000010:
+    if t > 100010: #10000010:
         break
