@@ -374,33 +374,54 @@ class Simulator:
         return Vector(float(list[0]), float(list[1]))
 
     def load_snapshot(self, snapshot_file):
+        try:
+            with h5py.File(snapshot_file, 'r') as f:
+                self.count_snapshot = int(f.attrs['count_snapshot'])
+                world = f['world']
+                t = float(world.attrs['t'])
+                gravity = self.list_to_vector(world.attrs['gravity'])
+                element_ = world['atoms']['element']
+                mass_ = world['atoms']['mass']
+                radius_ = world['atoms']['radius']
+                color_ = world['atoms']['color']
+                pos_ = world['atoms']['pos']
+                vel_ = world['atoms']['vel']
+                N = len(element_)
+                atoms = [0]*N
+                for i in range(N):
+                    element = Element(element_[i], float(mass_[i]), float(radius_[i]), pg.Color(color_[i]))
+                    pos = self.list_to_vector(pos_[i])
+                    vel = self.list_to_vector(vel_[i])
+                    atoms[i] = Atom(element, pos, vel)
+                width_ = world['walls']['width']
+                height_ = world['walls']['height']
+                theta_ = world['walls']['theta']
+                pos_ = world['walls']['pos']
+                color_ = world['walls']['color']
+                N = len(width_)
+                walls = [0]*N
+                for i in range(N):
+                    walls[i] = Wall(float(width_[i]), float(height_[i]), float(theta_[i]), self.list_to_vector(pos_[i]), pg.Color(color_[i]))
+                self.world = World(t, atoms, walls, gravity)
+        except:
+            self.rust_load_snapshot(snapshot_file)
+
+    def rust_load_snapshot(self, snapshot_file):
         with h5py.File(snapshot_file, 'r') as f:
             self.count_snapshot = int(f.attrs['count_snapshot'])
             world = f['world']
             t = float(world.attrs['t'])
-            gravity = self.list_to_vector(world.attrs['gravity'])
-            element_ = world['atoms']['element']
-            mass_ = world['atoms']['mass']
-            radius_ = world['atoms']['radius']
-            color_ = world['atoms']['color']
+            gravity = Vector(0, 0)
             pos_ = world['atoms']['pos']
             vel_ = world['atoms']['vel']
-            N = len(element_)
+            N = len(pos_)
+            element = Element('rust_atom', 1.0, 3.0, pg.Color('red'))
             atoms = [0]*N
             for i in range(N):
-                element = Element(element_[i], float(mass_[i]), float(radius_[i]), pg.Color(color_[i]))
                 pos = self.list_to_vector(pos_[i])
                 vel = self.list_to_vector(vel_[i])
                 atoms[i] = Atom(element, pos, vel)
-            width_ = world['walls']['width']
-            height_ = world['walls']['height']
-            theta_ = world['walls']['theta']
-            pos_ = world['walls']['pos']
-            color_ = world['walls']['color']
-            N = len(width_)
-            walls = [0]*N
-            for i in range(N):
-                walls[i] = Wall(float(width_[i]), float(height_[i]), float(theta_[i]), self.list_to_vector(pos_[i]), pg.Color(color_[i]))
+            walls = []
             self.world = World(t, atoms, walls, gravity)
         
     # def load_snapshot(self, snapshot_file):
