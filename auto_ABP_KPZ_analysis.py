@@ -16,6 +16,8 @@ if __name__=='__main__':
         num_list = [33,33,34]
     elif num == 500:
         num_list = [33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 34, 34, 34, 34, 34]
+    elif num < 30:
+        num_list = [num]
     end_num = 0
     for num in num_list:
         pool = Pool(num)
