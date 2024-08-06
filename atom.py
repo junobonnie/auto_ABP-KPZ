@@ -418,7 +418,7 @@ class Simulator:
             element = Element('rust_atom', 1.0, 3.0, pg.Color('red'))
             atoms = [0]*N
             for i in range(N):
-                pos = self.list_to_vector(pos_[i])
+                pos = Vector(pos_[i][0] - self.render.width/2, pos_[i][1] - self.render.height/2)
                 vel = self.list_to_vector(vel_[i])
                 atoms[i] = Atom(element, pos, vel)
             walls = []
