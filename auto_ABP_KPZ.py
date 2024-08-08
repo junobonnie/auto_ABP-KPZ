@@ -3,7 +3,6 @@ import os
 import sys
 from mail import Mail
 
-mail = Mail()
 width = int(sys.argv[1]) #시뮬레이션 공간의 가로길이
 height = int(sys.argv[2]) #시뮬레이션 공간의 세로길이
 time_cut = int(sys.argv[3]) #시뮬레이션 시간길이
@@ -11,7 +10,8 @@ num = int(sys.argv[4]) #시뮬레이션 횟수
 for i in range(1, num+1):
     print("%03d >>"%i)
     os.system('abp-kpz-rust %d %d %03d %d'%(width, height, i, time_cut))
-mail.set_subject("auto_ABP_KPZ %d %d %d %d"%(width, height, time_cut, num))
+mail = Mail()
+mail.set_subject("auto_ABP_KPZ %d %d %d %d is done."%(width, height, time_cut, num))
 mail.add_text("")
 mail.send()
 '''
