@@ -16,7 +16,10 @@ def draw_map(title, t, cmap = 'viridis'):
 def density_vs_height(atoms, t, unit_height=48):
     density = [0 for i in range(int(height//unit_height))]
     for atom in atoms:
-        density[int((atom.pos.y+height/2)//unit_height)] += 1
+        if int((atom.pos.y+height/2)//unit_height) < len(density):
+            density[int((atom.pos.y+height/2)//unit_height)] += 1
+        else:
+            density[-1] += 1
     density = np.array(density)
     density = density/(unit_height*width)
     heights_ = np.linspace(0, height, int(height//unit_height))
