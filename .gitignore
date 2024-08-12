@@ -1,6 +1,7 @@
 *.png
 *last_snapshot
 snapshots
+images
 *copy*
 */
 mail.config
