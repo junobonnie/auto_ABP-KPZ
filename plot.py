@@ -95,7 +95,23 @@ for is_error in [True, False]:
         plt.savefig('plot.png')
         plt.close()
 
-time = time = list(range(1000, 10010, 1000))
+V = []
+time_  = []
+for i in range(len(H)-1):
+    V.append((H[i+1] - H[i])/(time[i+1]-time[i]))
+    time_.append((time[i+1]+time[i])/2)
+
+plt.figure(dpi=300)
+plt.plot(time_, V, label="KPZ Simulation", color="red", marker=".", linestyle="None")
+plt.title("Velocity of Average of Heights")
+plt.xlabel("time")
+plt.ylabel("Velocity of Average of Heights")
+plt.xscale("log")
+plt.yscale("log")
+plt.savefig('v-plot.png')
+plt.close()
+
+time = list(range(100000, 1000010, 100000))
 LW = [[] for t in time]
 std_LW = [[] for t in time]
 for i, t in enumerate(time):
@@ -117,7 +133,7 @@ std_LW = np.array(std_LW)
 #time_min = 50
 #time_max = 700
 
-length = list(range(2, 96+1))
+length = np.array(list(range(2, 96+1)))
 
 ##popt, pcov = curve_fit(log_func, time[(time_min<=time) & (time<=time_max)], np.log(W[(time_min<>
 #kpz = (0.2)*(width_**0.5) * ((time)/width_**1.5)**(1/3)
@@ -125,7 +141,7 @@ length = list(range(2, 96+1))
 
 for is_error in [True, False]:
     plt.figure(dpi=300)
-    for i, t in enumerate(reversed(time)):
+    for i, t in enumerate(time):
         if is_error:
             plt.errorbar(length, LW[i], yerr=std_LW[i], label="t=%ds"%(t), marker=".", linestyle=None)
             #plt.errorbar(time[(time_min<=time) & (time<=time_max)], W[(time_min<=time) & (time<=tim>
@@ -134,11 +150,12 @@ for is_error in [True, False]:
             #plt.plot(time[(time_min<=time) & (time<=time_max)], W[(time_min<=time) & (time<=time_ma>
    #     plt.plot(time, kpz, label="Fitting curve", color="blue")
     #plt.title("$W=a t^b$, a = %.2f, b = %.5f, std_b = %.5f"%(popt[0], popt[1], np.sqrt(np.diag(>
-    plt.legend()
+    #plt.plot(length, length**(1/2), label="slope 1/2", color="red")
     plt.xlabel("length")
     plt.ylabel("Standard Deviation of Heights")
     plt.xscale("log")
     plt.yscale("log")
+    plt.legend()
     if is_error:
         plt.savefig('error_L_plot.png')
         plt.close()

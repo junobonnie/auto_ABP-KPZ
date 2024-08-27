@@ -58,7 +58,7 @@ simulator = Simulator(0.01, world, render)
 
 #W = []
 #time_cut = 100010
-time = list(range(1000, 10010, 1000))
+time = list(range(100000, 1000010, 100000))
 
 for t in time:
     if t > time_cut:

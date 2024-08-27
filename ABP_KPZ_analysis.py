@@ -27,7 +27,7 @@ def get_heights(map_):
     for i in range(len(map_[0])):
         for j in reversed(range(0, len(map_))):
             if map_[j][i] == 1:
-                heights[i] = j
+                heights[i] = unit*j
                 break
     return heights
 
@@ -35,6 +35,7 @@ width = int(sys.argv[1]) #시뮬레이션 공간의 가로길이
 height = int(sys.argv[2]) #시뮬레이션 공간의 세로길이
 folder = sys.argv[3]
 time_cut = int(sys.argv[4]) #시뮬레이션 시간길이
+unit = 5
 
 path = 'images/results/'+ str(width) + 'x' + str(height) + '/' + folder
 
@@ -67,7 +68,7 @@ with open('snapshots/' + str(width) + 'x' + str(height) + '/' + folder + "/W.txt
             k = t*20
             simulator.load_snapshot('snapshots/' + str(width) + 'x' + str(height) + '/' + folder + '/snapshot_%08d.hdf5'%(k))
             atoms = simulator.world.atoms
-            cic = CIC(atoms, 5, width, height)
+            cic = CIC(atoms, unit, width, height)
             map_ = cic.density_map()
             width_ = len(map_[0])
             height_ = len(map_)

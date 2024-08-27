@@ -25,7 +25,7 @@ if __name__=='__main__':
         pool.close()
         end_num += num
 
-    time = list(range(1000, 10010, 1000))
+    time = list(range(100000, 1000010, 100000))
     for t in time:
         if t > time_cut:
             break
