@@ -28,23 +28,50 @@ std_W = np.array(std_W)
 
 time = np.hstack([np.arange(0, 1000, 10), np.arange(1000, 10000, 100), np.arange(10000, 100000, 1000), np.arange(100000, 1000000, 10000)])
 time = time[:len(W)]
-time_min = 50
-time_max = 700
 
-popt, pcov = curve_fit(log_func, time[(time_min<=time) & (time<=time_max)], np.log(W[(time_min<=time) & (time<=time_max)]))
+time_min1 = 100
+time_max1 = 500
+time1 = time[(time_min1<=time) & (time<=time_max1)]
+W1 = W[(time_min1<=time) & (time<=time_max1)]
+std_W1 = std_W[(time_min1<=time) & (time<=time_max1)]
+popt1, pcov1 = curve_fit(log_func, time1, np.log(W1))
 #kpz = (0.2)*(width_**0.5) * ((time)/width_**1.5)**(1/3)
-kpz = func(time, *popt)
+kpz1 = func(time, *popt1)[(time_min1<=time) & (time<=time_max1)]
+
+time_min2 = 2000
+time_max2 = 3000
+time2 = time[(time_min2<=time) & (time<=time_max2)]
+W2 = W[(time_min2<=time) & (time<=time_max2)]
+std_W2 = std_W[(time_min2<=time) & (time<=time_max2)]
+popt2, pcov2 = curve_fit(log_func, time2, np.log(W2))
+#kpz = (0.2)*(width_**0.5) * ((time)/width_**1.5)**(1/3)
+kpz2 = func(time, *popt2)[(time_min2<=time) & (time<=time_max2)]
+
+time_min3 = 10000
+time_max3 = 15000
+time3 = time[(time_min3<=time) & (time<=time_max3)]
+W3 = W[(time_min3<=time) & (time<=time_max3)]
+std_W3 = std_W[(time_min3<=time) & (time<=time_max3)]
+popt3, pcov3 = curve_fit(log_func, time3, np.log(W3))
+#kpz = (0.2)*(width_**0.5) * ((time)/width_**1.5)**(1/3)
+kpz3 = func(time, *popt3)[(time_min3<=time) & (time<=time_max3)]
 
 for is_error in [True, False]:
     plt.figure(dpi=300)
     if is_error:
         plt.errorbar(time, W, yerr=std_W, label="KPZ Simulation", color="orange", marker=".", linestyle="None")
-        plt.errorbar(time[(time_min<=time) & (time<=time_max)], W[(time_min<=time) & (time<=time_max)], yerr=std_W[(time_min<=time) & (time<=time_max)], color="red", marker=".", linestyle="None")
+        plt.errorbar(time1, W1, yerr=std_W1, color="red", marker=".", linestyle="None")
+        plt.errorbar(time2, W2, yerr=std_W2, color="green", marker=".", linestyle="None")
+        plt.errorbar(time3, W3, yerr=std_W3, color="blue", marker=".", linestyle="None")
     else:
         plt.plot(time, W, label="KPZ Simulation", color="orange", marker=".", linestyle="None")
-        plt.plot(time[(time_min<=time) & (time<=time_max)], W[(time_min<=time) & (time<=time_max)], color="red", marker=".", linestyle="None")
-    plt.plot(time, kpz, label="Fitting curve", color="blue")
-    plt.title("$W=a t^b$, a = %.2f, b = %.5f, std_b = %.5f"%(popt[0], popt[1], np.sqrt(np.diag(pcov))[1]))
+        plt.plot(time1, W1, color="red", marker=".", linestyle="None")
+        plt.plot(time2, W2, color="green", marker=".", linestyle="None")
+        plt.plot(time3, W3, color="blue", marker=".", linestyle="None")
+    plt.plot(time1, kpz1, label="%.2f, %.5f, %.5f"%(popt1[0], popt1[1], np.sqrt(np.diag(pcov1))[1]), color="red")
+    plt.plot(time2, kpz2, label="%.2f, %.5f, %.5f"%(popt2[0], popt2[1], np.sqrt(np.diag(pcov2))[1]), color="green")
+    plt.plot(time3, kpz3, label="%.2f, %.5f, %.5f"%(popt3[0], popt3[1], np.sqrt(np.diag(pcov3))[1]), color="blue")
+    plt.title("$W=a t^b$, a, b, std_b")
     plt.legend()
     plt.xlabel("time")
     plt.ylabel("Standard Deviation of Heights")

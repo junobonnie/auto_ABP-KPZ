@@ -8,7 +8,7 @@ def func(x, a, b):
 def log_func(x, a, b):
     return np.log(func(x, a, b))
 
-paths = ["60x600","120x1200","240x2400","480x4800","480x1200","480x2400"]
+paths = ["60x600","120x1200","240x2400","480x9600","480x4800", "960x9600", "480x1200","480x2400", "1920x4800"]
 plt.figure(dpi=300)
 for path in paths:
     with open("snapshots/" + path + "/H.txt", "r") as f:
@@ -16,7 +16,7 @@ for path in paths:
         H = []
         for line in lines:
             H.append(float(line.strip()))
-    H = np.array(H)-int(path.split("x")[1])/10
+    H = np.array(H)-int(path.split("x")[1])/2
     time = np.hstack([np.arange(0, 1000, 10), np.arange(1000, 10000, 100), np.arange(10000, 100000, 1000), np.arange(100000, 1000000, 10000)])
     time = time[:len(H)]
     plt.plot(time, H, label=path, marker="None")#, linestyle="None")
