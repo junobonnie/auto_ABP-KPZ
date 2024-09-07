@@ -8,9 +8,15 @@ def func(x, a, b):
 def log_func(x, a, b):
     return np.log(func(x, a, b))
 
-path = "snapshots/480x4800"
-
-
+path = "snapshots/60x600"
+# path = "snapshots/120x1200"
+# path = "snapshots/240x2400"
+# path = "snapshots/480x4800"
+# path = "snapshots/960x9600"
+# path = "snapshots/480x1200"
+# path = "snapshots/480x2400"
+# path = "snapshots/480x9600"
+# path = "snapshots/1920x4800"
 
 with open(path + "/W.txt", "r") as f:
     lines = f.readlines()
@@ -29,32 +35,98 @@ std_W = np.array(std_W)
 time = np.hstack([np.arange(0, 1000, 10), np.arange(1000, 10000, 100), np.arange(10000, 100000, 1000), np.arange(100000, 1000000, 10000)])
 time = time[:len(W)]
 
-time_min1 = 100
-time_max1 = 500
+if path == "snapshots/60x600":
+    time_min1 = 100
+    time_max1 = 500
+    time_min2 = 600
+    time_max2 = 1000
+    time_min3 = 2000
+    time_max3 = 100000
+
+elif path == "snapshots/120x1200":
+    time_min1 = 100
+    time_max1 = 1000
+    time_min2 = 1500
+    time_max2 = 3000
+    time_min3 = 4000
+    time_max3 = 6000
+
+elif path == "snapshots/240x2400":
+    time_min1 = 100
+    time_max1 = 1000
+    time_min2 = 2000
+    time_max2 = 5000
+    time_min3 = 6000
+    time_max3 = 15000
+
+elif path == "snapshots/480x4800":
+    time_min1 = 100
+    time_max1 = 500
+    time_min2 = 1000
+    time_max2 = 4000
+    time_min3 = 5000
+    time_max3 = 30000
+
+elif path == "snapshots/960x9600":
+    time_min1 = 100
+    time_max1 = 500
+    time_min2 = 1000
+    time_max2 = 4000
+    time_min3 = 8000
+    time_max3 = 20000
+    
+elif path == "snapshots/480x1200":
+    time_min1 = 100
+    time_max1 = 400
+    time_min2 = 800
+    time_max2 = 3000
+    time_min3 = 5000
+    time_max3 = 10000
+
+elif path == "snapshots/480x2400":
+    time_min1 = 100
+    time_max1 = 500
+    time_min2 = 1000
+    time_max2 = 4000
+    time_min3 = 8000
+    time_max3 = 20000
+
+elif path == "snapshots/480x9600":
+    time_min1 = 100
+    time_max1 = 500
+    time_min2 = 1000
+    time_max2 = 4000
+    time_min3 = 5000
+    time_max3 = 20000
+
+elif path == "snapshots/1920x4800":
+    time_min1 = 100
+    time_max1 = 500
+    time_min2 = 1000
+    time_max2 = 4000
+    time_min3 = 8000
+    time_max3 = 20000
+
 time1 = time[(time_min1<=time) & (time<=time_max1)]
 W1 = W[(time_min1<=time) & (time<=time_max1)]
 std_W1 = std_W[(time_min1<=time) & (time<=time_max1)]
 popt1, pcov1 = curve_fit(log_func, time1, np.log(W1))
 #kpz = (0.2)*(width_**0.5) * ((time)/width_**1.5)**(1/3)
-kpz1 = func(time, *popt1)[(time_min1<=time) & (time<=time_max1)]
+kpz1 = func(time, *popt1)
 
-time_min2 = 2000
-time_max2 = 3000
 time2 = time[(time_min2<=time) & (time<=time_max2)]
 W2 = W[(time_min2<=time) & (time<=time_max2)]
 std_W2 = std_W[(time_min2<=time) & (time<=time_max2)]
 popt2, pcov2 = curve_fit(log_func, time2, np.log(W2))
 #kpz = (0.2)*(width_**0.5) * ((time)/width_**1.5)**(1/3)
-kpz2 = func(time, *popt2)[(time_min2<=time) & (time<=time_max2)]
+kpz2 = func(time, *popt2)
 
-time_min3 = 10000
-time_max3 = 15000
 time3 = time[(time_min3<=time) & (time<=time_max3)]
 W3 = W[(time_min3<=time) & (time<=time_max3)]
 std_W3 = std_W[(time_min3<=time) & (time<=time_max3)]
 popt3, pcov3 = curve_fit(log_func, time3, np.log(W3))
 #kpz = (0.2)*(width_**0.5) * ((time)/width_**1.5)**(1/3)
-kpz3 = func(time, *popt3)[(time_min3<=time) & (time<=time_max3)]
+kpz3 = func(time, *popt3)
 
 for is_error in [True, False]:
     plt.figure(dpi=300)
@@ -68,15 +140,19 @@ for is_error in [True, False]:
         plt.plot(time1, W1, color="red", marker=".", linestyle="None")
         plt.plot(time2, W2, color="green", marker=".", linestyle="None")
         plt.plot(time3, W3, color="blue", marker=".", linestyle="None")
-    plt.plot(time1, kpz1, label="%.2f, %.5f, %.5f"%(popt1[0], popt1[1], np.sqrt(np.diag(pcov1))[1]), color="red")
-    plt.plot(time2, kpz2, label="%.2f, %.5f, %.5f"%(popt2[0], popt2[1], np.sqrt(np.diag(pcov2))[1]), color="green")
-    plt.plot(time3, kpz3, label="%.2f, %.5f, %.5f"%(popt3[0], popt3[1], np.sqrt(np.diag(pcov3))[1]), color="blue")
-    plt.title("$W=a t^b$, a, b, std_b")
+    plt.plot(time1, kpz1[(time_min1<=time) & (time<=time_max1)], label="%.2f, %.5f, %.5f"%(popt1[0], popt1[1], np.sqrt(np.diag(pcov1))[1]), color="red")
+    plt.plot(time2, kpz2[(time_min2<=time) & (time<=time_max2)], label="%.2f, %.5f, %.5f"%(popt2[0], popt2[1], np.sqrt(np.diag(pcov2))[1]), color="green")
+    plt.plot(time3, kpz3[(time_min3<=time) & (time<=time_max3)], label="%.2f, %.5f, %.5f"%(popt3[0], popt3[1], np.sqrt(np.diag(pcov3))[1]), color="blue")
+    plt.plot(time, kpz1, color="red", alpha=0.2)
+    plt.plot(time, kpz2, color="green", alpha=0.2)
+    plt.plot(time, kpz3, color="blue", alpha=0.2)
+    plt.title("$W=a t^b$, a, b, std_b, %s"%(path.split("/")[1]))
     plt.legend()
     plt.xlabel("time")
     plt.ylabel("Standard Deviation of Heights")
     plt.xscale("log")
     plt.yscale("log")
+    plt.ylim(W.min(), W.max())
     if is_error:
         plt.savefig('error_log_plot.png')
         plt.close()
