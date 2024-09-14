@@ -8,7 +8,7 @@ def func(x, a, b):
 def log_func(x, a, b):
     return np.log(func(x, a, b))
 
-path = "snapshots/60x600"
+# path = "snapshots/60x600"
 # path = "snapshots/120x1200"
 # path = "snapshots/240x2400"
 # path = "snapshots/480x4800"
@@ -16,7 +16,7 @@ path = "snapshots/60x600"
 # path = "snapshots/480x1200"
 # path = "snapshots/480x2400"
 # path = "snapshots/480x9600"
-# path = "snapshots/1920x4800"
+path = "snapshots/1920x4800"
 
 with open(path + "/W.txt", "r") as f:
     lines = f.readlines()
