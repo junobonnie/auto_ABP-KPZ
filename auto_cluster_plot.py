@@ -18,7 +18,7 @@ def main(t):
 
 time = np.hstack([np.arange(0, 1000, 10), np.arange(1000, 10000, 100), np.arange(10000, 100000, 1000), np.arange(100000, 1000000, 10000)])
 time = time[(time<=time_cut)]
-unit_ = 33
+unit_ = 11
 
 if __name__=='__main__':
     end_num_ = 0

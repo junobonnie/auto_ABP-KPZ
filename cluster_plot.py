@@ -90,7 +90,7 @@ for i in range(1, num+1):
     clusters = [cluster for cluster in clusters if cluster != largest_cluster]
     clusters_.extend(clusters)
 
-hist = np.histogram([len(cluster) for cluster in clusters_], bins = 100)
+hist = np.histogram([len(cluster) for cluster in clusters_], bins = 5000, range=(1, 5000))
 print(t)
 
 plt.figure(dpi=300)
@@ -98,7 +98,7 @@ plt.figure(dpi=300)
 plt.step(hist[1][:-1], hist[0]/num, where='mid', color='b', linewidth=1.2)
 plt.fill_between(hist[1][:-1], hist[0]/num, step='mid', color='b', alpha=0.5)
 plt.xlim(1, 5000)
-plt.ylim(0.1, 2e4)
+plt.ylim(0.01, 2e4)
 plt.xscale('log')
 plt.yscale('log')
 plt.ylabel('Number of clusters')
