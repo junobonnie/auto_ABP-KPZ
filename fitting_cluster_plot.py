@@ -98,18 +98,24 @@ for i in range(1, num+1):
     clusters_.extend(clusters)
 
 hist = np.histogram([len(cluster) for cluster in clusters_], bins = 5000, range=(1, 5000))
+x = hist[1][:-1]
+y = hist[0]/num
 print(t)
 
-popt, pcov = curve_fit(log_func, hist[1][:-1], np.log(hist[0]/num), p0=[5000., -2.], maxfev=500000)
+y_nonzero = y[y.nonzero()]
+x_nonzero = x[y.nonzero()]
+
+popt, pcov = curve_fit(log_func, x_nonzero, np.log(y_nonzero), p0=[5000., -2.16])
 #kpz = (0.2)*(width_**0.5) * ((time)/width_**1.5)**(1/3)
-#popt = [5000., -2.]
-model = func(hist[1][:-1], *popt)
+#popt = [5000., -2.16]
+model = func(x_nonzero, *popt)
 
 plt.figure(dpi=300)
 # plt.hist([len(cluster) for cluster in clusters_], bins = 100, alpha=0.5, color='b', edgecolor='black', linewidth=1.2)
-plt.step(hist[1][:-1], hist[0]/num, where='mid', color='b', linewidth=1.2)
-plt.fill_between(hist[1][:-1], hist[0]/num, step='mid', color='b', alpha=0.5)
-plt.plot(hist[1][:-1], model, color='r', linewidth=1.2)
+plt.step(x, y, where='mid', color='b', linewidth=1.2)
+plt.fill_between(x, y, step='mid', color='b', alpha=0.5)
+plt.plot(x_nonzero, model, color='r', linewidth=1.2, label='a = %.2f, b = %.2f'%(popt[0], popt[1]))
+plt.legend()
 plt.xlim(1, 5000)
 plt.ylim(0.01, 2e4)
 plt.xscale('log')
