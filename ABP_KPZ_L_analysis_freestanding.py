@@ -22,10 +22,19 @@ def draw_map(title, cmap = 'viridis'):
     plt.savefig(path + '/' + title + '.png', bbox_inches='tight')
     plt.close()
 
-def get_heights(map_):
+def get_heights_1(map_):
     heights = [0 for i in range(len(map_[0]))]
     for i in range(len(map_[0])):
         for j in reversed(range(0, len(map_))):
+            if map_[j][i] == 1:
+                heights[i] = unit*j
+                break
+    return heights
+
+def get_heights_2(map_):
+    heights = [0 for i in range(len(map_[0]))]
+    for i in range(len(map_[0])):
+        for j in range(0, len(map_)):
             if map_[j][i] == 1:
                 heights[i] = unit*j
                 break
@@ -69,7 +78,7 @@ simulator = Simulator(0.01, world, render)
 
 #W = []
 #time_cut = 100010
-time = list(range(100000, 200010, 20000))
+time = list(range(0, 100010, 20000))
 #time = list(range(100, 510, 100))
 #time = list(range(10000, 20010, 1000))
 
@@ -86,9 +95,6 @@ for t in time:
 
     #draw_map('0_%08d'%(k), 'plasma')
     #map_ = np.flip(map_, axis=0)
-    for i in range(width_):
-        for j in range(int(height/2)//5):
-            map_[j][i] = 1   
 
     #draw_map('1_%08d'%(k), 'plasma')
 
@@ -103,12 +109,28 @@ for t in time:
         map_[j][i] = 1
     #draw_map('3_%08d'%(k))
     print(folder + ": " + str(t))
-    heights = get_heights(map_)
+    heights_1 = get_heights_1(map_)
+    heights_2 = get_heights_2(map_)
+    heights_ = [(heights_1[i] - heights_2[i]) for i in range(len(heights_1))]
     #print(heights)
-    with open('snapshots/' + str(width) + 'x' + str(height) + '/' + folder + "/" + str(t) + "_LW.txt", "w") as f:
-        for i in range(2, width_):
-            std_ = height_std_l(heights, i)
+    with open('snapshots/' + str(width) + 'x' + str(height) + '/' + folder + "/" + str(t) + "_LW1.txt", "w") as f:
+        i = 0
+        while 3*2**i <= width_:
+            std_ = height_std_l(heights_1, 3*2**i)
             f.write(str(std_)+"\n")
+            i += 1
+    with open('snapshots/' + str(width) + 'x' + str(height) + '/' + folder + "/" + str(t) + "_LW2.txt", "w") as f:
+        i = 0
+        while 3*2**i <= width_:
+            std_ = height_std_l(heights_2, 3*2**i)
+            f.write(str(std_)+"\n")
+            i += 1
+    with open('snapshots/' + str(width) + 'x' + str(height) + '/' + folder + "/" + str(t) + "_LW.txt", "w") as f:
+        i = 0
+        while 3*2**i <= width_:
+            std_ = height_std_l(heights_, 3*2**i)
+            f.write(str(std_)+"\n")
+            i += 1
     
         
 # W = np.array(W)

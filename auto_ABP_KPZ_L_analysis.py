@@ -12,7 +12,9 @@ def main(i):
     os.system('pypy3 ABP_KPZ_L_analysis.py %d %d %03d %d'%(width, height, i, time_cut))
 
 if __name__=='__main__':
-    if num == 100:
+    if num == 50:
+        num_list = [10, 10, 10, 10, 10]
+    elif num == 100:
         num_list = [33,33,34]
     elif num == 500:
         num_list = [33, 33, 33, 33, 33, 33, 33, 33, 33, 33, 34, 34, 34, 34, 34]
@@ -25,7 +27,9 @@ if __name__=='__main__':
         pool.close()
         end_num += num
 
-    time = list(range(100000, 1000010, 100000))
+    time = list(range(100000, 200010, 20000))
+    #time = list(range(100, 510, 100))
+    #time = list(range(10000, 20010, 1000))
     for t in time:
         if t > time_cut:
             break
